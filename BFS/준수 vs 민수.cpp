@@ -63,6 +63,7 @@ int main(){
 			}
 		}
 	}
+	
 	printf("%d",ans[n-1][m-1]);
 	
 }
