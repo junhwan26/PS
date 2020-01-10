@@ -1,18 +1,21 @@
 #include<stdio.h>
-int n;
-long long in[101111];
+#include<vector>
+#include<algorithm>
+#include<cmath>
+#include<iostream>
+using namespace std;
 
-long long abs(long long a)
-{
-	return a > 0 ? a : -a;
-}
+long long int v[100001];
+int n;
+
 
 long long dis(long long a)
 {
-	int cnt = 0;
-	for (int i = 0; i < n; i++)
+	long long int cnt = 0;
+	
+	for (long long int i = 0; i < n; i++)
 	{
-		cnt += abs(in[i] - a * i);
+		cnt += abs(a*i-v[i]);
 	}
 	return cnt;
 }
@@ -21,48 +24,42 @@ long long dis(long long a)
 int main()
 {
 	scanf("%d", &n);
+
 	for (int i = 0; i < n; i++)
 	{
-		//	printf("i = %d : ",i);
-		scanf("%lld", &in[i]);
-	}
-	int left = 1, right = in[n - 1];
-	long long dl = dis(left), dr = dis(right) ,dm;
-	while (right>left)
-	{
-		long long mid = (left + right) / 2;
-		dm = dis(mid);
-		printf("left=%d right= %d mid =%d dl =%d dr=%d dm=%d\n",left,right,mid ,dl,dr,dm);
-
-		if (dl>=dm&&dr>=dm)
-		{
-			if(dis(mid+1)>dis(mid-1))
-			{
-				right=mid-1;
-				dr=dm;
-			}
-			else
-			{
-				left = mid+1;
-				dl=dm;
-			}	
-		}
-		else if (dl>=dm&&dm>=dr)
-		{
-			left = mid;
-			dl=dm;
-		}
-		else if(dr>=dm&&dm>=dl)
-		{
-			right=mid;
-			dr=dm;
-		}
+		scanf("%lld", &v[i]);
 		
-		printf("[changed] left=%d right= %d\n",left,right);
 	}
-	if(dl<dr)
-		printf("%d",dl);
-	else
-		printf("%d",dr);
 
+	//for (int i = 0; i < n; i++)
+	//	printf("%d ",v[i]);
+	int sum=0;
+	
+	//printf("%d",sum);
+	
+	long long int s=0;
+	long long int e=1000000000;
+
+	long long int left;
+	long long int right;
+			
+	while(s+2!=e){
+		left=(long long int)(s*2+e)/3;
+		right=(long long int)(s+2*e)/3;
+		//printf("%d %d %d %d\n",s,left,right,e);
+		//printf("dif(left) %d  dis(right)%d\n",dis(left),dis(right));
+		if(dis(left)>dis(right))
+			s=left;
+		else if(dis(left)<dis(right))
+			e=right;
+		else{
+		}
+	}
+	min=dis(s);
+	for(int i=s+1;i<=e;i++){
+		if(dis(i)<min){
+			min=dis(i);
+		}
+	}
+	printf("%d",min);
 }
