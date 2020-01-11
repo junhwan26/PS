@@ -42,7 +42,7 @@ int main()
 
 	long long int left;
 	long long int right;
-			
+			//mid , mid+1 ºñ±³ 
 	while(s+2!=e){
 		left=(long long int)(s*2+e)/3;
 		right=(long long int)(s+2*e)/3;
