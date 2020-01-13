@@ -1,5 +1,3 @@
 # DataStruct-Algorithm
 
 study
-
-++
