@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 long long f(long long  a,long long  n){
-	//printf("%d %d\n",a,n);
+	printf("%d %d\n",a,n);
 	a%=10007;
 	if(n==1){
 		return a;
@@ -15,6 +15,6 @@ long long f(long long  a,long long  n){
 
 int main(){
 	long long  a,n;
-	scanf("%d %d",&a,&n);
+	scanf("%lld %lld",&a,&n);
 	printf("%lld",f(a,n));
 }
