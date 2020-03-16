@@ -29,7 +29,7 @@ int main(){
 	
 	int ans=0;
 
-	for(int h=1; h<=100; h++){
+	for(int h=0; h<=100; h++){
 		
 		for(int i=0;i<n;i++){
 			for(int j=0;j<n;j++){
@@ -41,7 +41,6 @@ int main(){
 
 		int cnt=0;
 		for(int i=0;i<n;i++){
-			//cout<<n;
 			for(int j=0;j<n;j++){
 				if(check[i][j]||!in[i][j])
 					continue;
