@@ -8,17 +8,15 @@ int main(){
 	cin>>n;
 	for(int i=1;i<=n;i++)
 		cin>>in[i];
-	int ans;
-	z
+	int ans=0;
 	for(int i=1;i<=n;i++)
 	{
-		dp[i]=in[i];
-		for(int j=1;j<=i;j++){
+		for(int j=0;j<=i;j++){
 			if(in[j]<in[i])
-				dp[i]=max(dp[i],dp[j]+in[i]);
+				dp[i]=max(dp[i],dp[j]+1);
 		}
-		ans=max(dp[i],ans);
 		
+		ans=max(dp[i],ans);
 	}
 	
 	cout<<ans;
