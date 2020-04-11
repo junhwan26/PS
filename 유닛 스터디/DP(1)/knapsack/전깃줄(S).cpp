@@ -32,7 +32,7 @@ int main(){
 				dp[i]=max(dp[i],dp[j]+1);
 			}
 		}
-		ans = ans>dp[i] ? ans : dp[i];
+		ans=max(ans,dp[i]);
 
 	}
 	printf("%d",n-ans);
