@@ -1,89 +1,103 @@
-#include<iostream>
-
+#include<bits/stdc++.h>
+ 
 using namespace std;
-
-long long st[8000001];
-long long lazy[8000001];
-long long arr[1000000];
-long long make_st(long long node, long long start, long long end)
-{
-    if (start == end)
-        return st[node] = arr[start];
-
-    long long mid = (start + end) / 2;
-    return st[node] = make_st(node * 2, start, mid) + make_st(node * 2 + 1, mid + 1, end);
  
-}
-
-
-
-
-void update_lazy(long long node, long long start, long long end)
-{
-    if(lazy[node] != 0){
-        st[node] += (end-start+1) * lazy[node];
-        if(start!=end){
-            lazy[node*2]+=lazy[node];
-            lazy[node*2+1]+=lazy[node];
-        }
-        lazy[node]=0;
-    }
-}
-
-long long sum(long long node, long long start, long long end, long long left, long long right)
-{
-    update_lazy(node, start, end);
-    if (left > end || right < start) return 0;
-    if (left <= start && end <= right) return st[node];
+#define LL long long
  
-    long long mid = (start + end) / 2;
-    return sum(node * 2, start, mid, left, right) + sum(node * 2 + 1, mid + 1, end, left, right);
-}
-
-void update_st(long long node, long long start, long long end, long long left, long long right, long long diff)
+vector<LL> v, tree, lazy;
+int n, m, k;
+ 
+LL init(int node, int s, int e)
 {
-    update_lazy(node, start, end);
-    
-    if (right < start || left > end) return;
-    
-    if (left <= start && end <= right) {
-          st[node] += (end-start+1)*diff;
-          if (start != end) {
-              lazy[node*2] += diff;
-              lazy[node*2+1] += diff;
-          }
-          return;
-    }
-    
-    update_st(node*2, start, (start +end)/2, left,right, diff);
-    update_st(node*2+1,(start +end)/2 +1, end, left,right, diff);
-    st[node] = st[node*2] + st[node*2 +1];
-    return;
+    if (s == e) return tree[node] = v[s];
+    return tree[node] = init(2 * node, s, (s + e) / 2) +
+        init(2 * node + 1, (s + e) / 2 + 1, e);
 }
-
-
-
-
-int main(){
-    long long N,M,K;
-    cin>>N>>M>>K;
-    for(long long i=0;i<N;i++){
-        cin>>arr[i];
-    }
-    make_st(1, 0, N-1);
-    for(long long i=0;i<M+K;i++){
-        long long a,b,c;
-        cin>>a>>b>>c;
-        if(a==1){
-            int tmp;
-            cin>>tmp;
-            update_st(1, 0, N-1, b-1,c-1, tmp);
-            arr[b-1] = c;
+ 
+void update_lazy(int node, int s, int e)
+{
+    if (lazy[node] != 0) {
+        tree[node] += (e - s + 1) * lazy[node];
+ 
+        // leaf가 아니라면
+        if (s != e) {
+            lazy[2 * node] += lazy[node];
+            lazy[2 * node + 1] += lazy[node];
         }
-        else{
-            cout<<sum(1, 0, N-1, b-1, c-1)<<"\n";
-        }
+ 
+        lazy[node] = 0;
     }
 }
-
-
+ 
+void update_range(int node, int l, int r, int s, int e, LL diff)
+{
+    update_lazy(node, s, e);
+ 
+    if (r < s || e < l) return;
+    
+    if (l <= s && e <= r) {
+        tree[node] += (e - s + 1) * diff;
+ 
+        if (s != e) {
+            lazy[2 * node] += diff;
+            lazy[2 * node + 1] += diff;
+        }
+ 
+        return;
+    }
+ 
+    update_range(2 * node, l, r, s, (s + e) / 2, diff);
+    update_range(2 * node + 1, l, r, (s + e) / 2 + 1, e, diff);
+    tree[node] = tree[2 * node] + tree[2 * node + 1];
+}
+ 
+LL sum(int node, int l, int r, int s, int e)
+{
+    update_lazy(node, s, e);
+ 
+    if (r < s || e < l) return 0;
+ 
+    if (l <= s && e <= r) return tree[node];
+ 
+    return sum(2 * node, l, r, s, (s + e) / 2) +
+        sum(2 * node + 1, l, r, (s + e) / 2 + 1, e);
+}
+ 
+int main()
+{
+    //freopen("C:\\Users\\park7\\Desktop\\buba.in.6", "r", stdin);
+    cin.tie(0);
+    scanf("%d %d %d", &n, &m, &k);
+ 
+    int h = (int)ceil(log2(n));
+    int tree_size = 1 << (h + 1);
+ 
+    v.assign(n, 0);
+    tree.assign(tree_size, 0);
+    lazy.assign(tree_size, 0);
+ 
+    for (int i = 0; i < n; i++) {
+        scanf("%lld", &v[i]);
+    }
+ 
+    init(1, 0, n - 1);
+ 
+    for (int i = 0; i < m + k; i++) {
+        int a;
+        scanf("%d", &a);
+ 
+        if (a == 1) {
+            int b, c;
+            LL d;
+            scanf("%d %d %lld", &b, &c, &d);
+            update_range(1, b - 1, c - 1, 0, n - 1, d);
+        }
+        else {
+            int b, c;
+            scanf("%d %d", &b, &c);
+            printf("%lld\n", sum(1, b - 1, c - 1, 0, n - 1));
+        }
+    }
+ 
+    return 0;
+}
