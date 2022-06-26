@@ -1,10 +1,10 @@
 #include<iostream>
 using namespace std;
-int p[100];
+long long p[100];
 
 
 int main(){
-    int n;
+    long long n;
     cin>>n;
     p[1]=1;
     p[0]=0;
